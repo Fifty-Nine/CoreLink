@@ -1,20 +1,24 @@
-CORELINK_HEADERS += \
-    InstructionSet.h \
-    Node.h \
-    Process.h \
-    Program.h \
-    Types.h \
+isEmpty(CORELINKBASE_CORELINK_COMPILE_INCLUDED) { 
+    CORELINKBASE_CORELINK_COMPILE_INCLUDED = yes
 
-CORELINK_SOURCES += \
-    InstructionSet.cpp \
-    Node.cpp \
-    Process.cpp \
-    Program.cpp \
+    CORELINK_HEADERS += \
+        InstructionSet.h \
+        Node.h \
+        Process.h \
+        Program.h \
+        Types.h \
 
-for(header, CORELINK_HEADERS) { 
-    HEADERS += $$PWD/$$header
-}
+    CORELINK_SOURCES += \
+        InstructionSet.cpp \
+        Node.cpp \
+        Process.cpp \
+        Program.cpp \
 
-for(source, CORELINK_SOURCES) { 
-    SOURCES += $$PWD/$$source
+    for(header, CORELINK_HEADERS) { 
+        HEADERS += $$PWD/$$header
+    }
+
+    for(source, CORELINK_SOURCES) { 
+        SOURCES += $$PWD/$$source
+    }
 }

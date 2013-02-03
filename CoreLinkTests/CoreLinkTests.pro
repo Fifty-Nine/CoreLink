@@ -2,22 +2,15 @@ TEMPLATE = app
 
 QT += testlib
 
-include( ../Common.pri )
+include(../UseDefaults.pri)
+include(../CoreLinkBase/Link.pri)
+include(../CoreLinkBase/Include.pri)
 
-CORELINKBASE_DIR = $$PWD/../CoreLinkBase
-CORELINKBASE_BUILD_DIR = $$CORELINKBASE_DIR/$$DESTDIR
-
-LIBS += -L$$CORELINKBASE_BUILD_DIR -lCoreLinkBase
-QMAKE_LFLAGS += -Wl,-rpath,$$CORELINKBASE_BUILD_DIR
-
-INCLUDEPATH += $$CORELINKBASE_DIR
-DEPENDPATH += $$CORELINKBASE_DIR
+TARGET = CoreLinkTest$${TARGET_SUFFIX}
 
 test.commands = $$DESTDIR/$$TARGET
 QMAKE_EXTRA_TARGETS += test
 QMAKE_POST_LINK = $(MAKE) test
-
-PRE_TARGETDEPS += $$CORELINKBASE_BUILD_DIR/libCoreLinkBase.so
 
 SOURCES += \
     ProcessTests.cpp \

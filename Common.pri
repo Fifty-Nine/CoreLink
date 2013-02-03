@@ -1,8 +1,11 @@
-OBJECTS_DIR = build/objs
-MOC_DIR = build/mocs
-UI_DIR = build/uics
-RCC_DIR = build/rccs
+isEmpty(COMMON_INCLUDED) { 
+    COMMON_INCLUDED = yes
 
-DESTDIR = build
+    COMMON_OBJECTS_DIR = build/objs
+    COMMON_MOC_DIR = build/mocs
+    COMMON_UI_DIR = build/uics
+    COMMON_RCC_DIR = build/rccs
+    COMMON_DESTDIR = $$PWD/build
 
-QMAKE_CXXFLAGS += -std=c++11
+    QMAKE_CXXFLAGS += -std=c++11
+}
