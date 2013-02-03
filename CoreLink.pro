@@ -5,4 +5,5 @@ include(Common.pri)
 
 SUBDIRS = \
     CoreLinkBase \
+    CoreLinkNetwork \
     CoreLinkTests \

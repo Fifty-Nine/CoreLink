@@ -1,0 +1,8 @@
+isEmpty(CORELINKNETWORK_INCLUDE_INCLUDED) { 
+    CORELINKNETWORK_INCLUDE_INCLUDED = yes
+
+    include(Common.pri)
+    include(../CoreLinkBase/Include.pri)
+    INCLUDEPATH += $$CORELINKNETWORK_DIR
+    DEPENDPATH += $$CORELINKNETWORK_DIR
+}
