@@ -25,6 +25,7 @@ public:
     InstructionSet(YieldFcn yield, ExitFcn exit, Node& m_node);
 
     void noOp() const;
+    void wait(int time) const;
     PIDList getRunningPrograms() const;
     ProgramIDList getInstalledPrograms() const;
     ProgramID getProgramID(PID process_id) const;

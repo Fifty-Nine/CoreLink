@@ -14,6 +14,11 @@ void InstructionSet::noOp() const
     m_yield(1);
 }
 
+void InstructionSet::wait(int time) const
+{
+    m_yield(time);
+}
+
 PIDList InstructionSet::getRunningPrograms() const
 {
     m_yield(1);
