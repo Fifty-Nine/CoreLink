@@ -13,14 +13,12 @@ class Program
     ProgramID m_id;
 
 public:
-    Process start(Node& node, PID pid);
     ProgramID getID() const { return m_id; }
 
-    virtual void main(InstructionSet& is);
+    virtual void main(InstructionSet& is) = 0;
 
 protected:
     Program();
-
 };
 
 } // namespace CoreLink
