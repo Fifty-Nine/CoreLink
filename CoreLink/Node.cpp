@@ -35,6 +35,11 @@ void Node::tick(int quanta)
     }
 }
 
+void Node::addNeighbor(Node *neighbor_p)
+{
+    m_neighbors << neighbor_p;
+}
+
 PIDList Node::getRunningPrograms() const
 {
     return m_running_programs.keys();
@@ -63,6 +68,11 @@ PID Node::getPID(ProgramID id) const
     }
 
     return PID();
+}
+
+NodeList Node::getNeighbors() const
+{
+    return m_neighbors;
 }
 
 PID Node::spawnProcess(ProgramID id)

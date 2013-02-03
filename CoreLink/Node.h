@@ -12,6 +12,9 @@ namespace CoreLink
 class Program;
 class Process;
 
+class Node;
+typedef QList<Node*> NodeList;
+
 class Node
 {
     typedef std::shared_ptr<Process> ProcessPtr;
@@ -20,16 +23,19 @@ class Node
     ProcessMap m_running_programs;
     ProgramMap m_installed_programs;
     int m_next_pid;
+    NodeList m_neighbors;
 
 public:
     Node();
     
     void tick(int time_quanta);
+    void addNeighbor(Node *node_p);
 
     PIDList getRunningPrograms() const;
     ProgramIDList getInstalledPrograms() const;
     ProgramID getProgramID(PID id) const;
     PID getPID(ProgramID id) const;
+    NodeList getNeighbors() const;
     
     PID spawnProcess(ProgramID id);
     bool installProgram(Program *program_p);
