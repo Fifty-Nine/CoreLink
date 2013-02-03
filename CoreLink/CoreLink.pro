@@ -14,6 +14,7 @@ HEADERS += \
 SOURCES += \
     InstructionSet.cpp \
     Node.cpp \
+    Process.cpp \
     Program.cpp \
 
 
