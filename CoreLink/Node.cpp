@@ -23,7 +23,7 @@ void Node::tick(int quanta)
 
     for (ProcessPtr& p: m_running_programs)
     {
-        if (p->run(quanta))
+        if (!p->run(quanta))
         {
             finished << p->getPID();
         }
@@ -62,7 +62,7 @@ PID Node::getPID(ProgramID id) const
         }
     }
 
-    return -1;
+    return PID();
 }
 
 PID Node::spawnProcess(ProgramID id)

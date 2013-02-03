@@ -4,8 +4,8 @@
 
 namespace CoreLink { 
 
-InstructionSet::InstructionSet(YieldFcn yield, Node& node) :
-    m_yield(yield), m_node(node)
+InstructionSet::InstructionSet(YieldFcn yield, ExitFcn exit, Node& node) :
+    m_yield(yield), m_exit(exit), m_node(node)
 {
 }
 
@@ -42,6 +42,11 @@ bool InstructionSet::deleteProgram(ProgramID id)
 {
     m_yield(5);
     return m_node.deleteProgram(id);
+}
+
+void InstructionSet::exit()
+{
+    m_exit();
 }
 
 } // namespace CoreLink
