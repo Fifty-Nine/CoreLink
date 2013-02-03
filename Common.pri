@@ -4,3 +4,5 @@ UI_DIR = build/uics
 RCC_DIR = build/rccs
 
 DESTDIR = build
+
+QMAKE_CXXFLAGS += -std=c++11

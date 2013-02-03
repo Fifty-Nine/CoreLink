@@ -4,8 +4,6 @@ include( ../Common.pri )
 
 INCLUDEPATH += ..
 
-QMAKE_CXXFLAGS += -std=c++0x
-
 HEADERS += \
     InstructionSet.h \
     Node.h \
