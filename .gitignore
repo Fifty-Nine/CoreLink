@@ -18,6 +18,8 @@
 moc_*.cpp
 qrc_*.cpp
 Makefile
+Makefile.*
 *-build-*
 *.swp
 */build/*
+build/
