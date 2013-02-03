@@ -1,5 +1,7 @@
 TEMPLATE = lib
 
+include( ../Common.pri )
+
 INCLUDEPATH += ..
 
 QMAKE_CXXFLAGS += -std=c++0x
