@@ -15,9 +15,9 @@ DEPENDPATH += $$CORELINKBASE_DIR
 
 test.commands = $$DESTDIR/$$TARGET
 QMAKE_EXTRA_TARGETS += test
+QMAKE_POST_LINK = $(MAKE) test
 
 PRE_TARGETDEPS += $$CORELINKBASE_BUILD_DIR/libCoreLinkBase.so
-POST_TARGETDEPS += test
 
 SOURCES += \
     ProcessTests.cpp \
