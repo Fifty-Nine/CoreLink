@@ -5,7 +5,8 @@
 namespace CoreLink { 
 
 Node::Node() : 
-    m_next_pid(1)
+    m_next_pid(1), 
+    m_id(NodeID::createUuid())
 {
 }
 
@@ -38,6 +39,11 @@ void Node::tick(int quanta)
 void Node::addNeighbor(Node *neighbor_p)
 {
     m_neighbors << neighbor_p;
+}
+
+NodeID Node::getID() const
+{
+    return m_id;
 }
 
 PIDList Node::getRunningPrograms() const

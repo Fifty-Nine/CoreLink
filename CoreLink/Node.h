@@ -24,6 +24,7 @@ class Node
     ProgramMap m_installed_programs;
     int m_next_pid;
     NodeList m_neighbors;
+    NodeID m_id;
 
 public:
     Node();
@@ -31,6 +32,7 @@ public:
     void tick(int time_quanta);
     void addNeighbor(Node *node_p);
 
+    NodeID getID() const;
     PIDList getRunningPrograms() const;
     ProgramIDList getInstalledPrograms() const;
     ProgramID getProgramID(PID id) const;

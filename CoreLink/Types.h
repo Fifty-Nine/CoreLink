@@ -12,5 +12,8 @@ typedef QList<PID> PIDList;
 typedef QUuid ProgramID;
 typedef QList<ProgramID> ProgramIDList;
 
+typedef QUuid NodeID;
+typedef QList<QUuid> NodeIDList;
+
 
 } // namespace CoreLink
