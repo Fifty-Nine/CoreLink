@@ -13,7 +13,11 @@ QMAKE_LFLAGS += -Wl,-rpath,$$CORELINK_BUILD_DIR
 INCLUDEPATH += ..
 DEPENDPATH += ..
 
+test.commands = $$DESTDIR/$$TARGET
+QMAKE_EXTRA_TARGETS += test
+
 PRE_TARGETDEPS += $$CORELINK_BUILD_DIR/libCoreLink.so
+POST_TARGETDEPS += test
 
 SOURCES += \
     ProcessTests.cpp \
