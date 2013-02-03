@@ -1,5 +1,7 @@
 #include "CoreLink/Node.h"
 
+#include "CoreLink/Program.h"
+
 namespace CoreLink { 
 
 Node::Node() : 
@@ -76,6 +78,45 @@ PID Node::spawnProcess(ProgramID id)
     m_running_programs.insert(pid, std::move(p));
 
     return pid;
+}
+
+bool Node::installProgram(Program *program_p)
+{
+    ProgramID id = program_p->getID();
+    if (m_installed_programs.contains(id))
+    {
+        return false;
+    }
+
+    m_installed_programs.insert(id, program_p);
+
+    return true;
+}
+
+bool Node::deleteProgram(ProgramID id)
+{
+    ProgramMap::iterator it = m_installed_programs.find(id);
+    if ((it == m_installed_programs.end()) || 
+        (getPID(id) != PID()))
+    {
+        return false;
+    }
+
+    m_installed_programs.erase(it);
+
+    return true;
+}
+
+bool Node::killProcess(PID id)
+{
+    ProcessMap::iterator it = m_running_programs.find(id);
+    if (it == m_running_programs.end())
+    {
+        return false;
+    }
+
+    m_running_programs.erase(it);
+    return true;
 }
 
 } // namespace CoreLink
