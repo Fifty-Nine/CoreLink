@@ -65,6 +65,16 @@ public:
     }
 };
 
+class ProgramWithResourcesExplicitExit : public ProgramWithResources
+{
+public:
+    virtual void main(CoreLink::InstructionSet& is)
+    {
+        ProgramWithResources::main(is);
+        is.exit();
+    }
+};
+
 class ProcessTests : public QObject
 {
     Q_OBJECT
@@ -111,6 +121,25 @@ private slots:
     void stackUnwindsOnImplicitExit()
     {
         ProgramWithResources p;
+        CoreLink::Node n;
+
+
+        n.installProgram(&p);
+        (void)n.spawnProcess(p.getID());
+
+        n.tick(1);
+        p.enableExit();
+
+        QVERIFY(p.hasAllocatedResources());
+
+        n.tick(1);
+
+        QVERIFY(!p.hasAllocatedResources());
+    }
+
+    void stackUnwindsOnExplicitExit()
+    {
+        ProgramWithResourcesExplicitExit p;
         CoreLink::Node n;
 
 
