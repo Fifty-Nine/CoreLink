@@ -52,7 +52,6 @@ public:
         ResourceHandle h(m_resource_count);
         DummyProgram::main(is);
     }
-
 };
 
 class ProcessTests : public QObject
@@ -96,6 +95,29 @@ private slots:
         n.killProcess(pid);
 
         QVERIFY(!p.HasAllocatedResources());
+    }
+
+    void canRunMultiplePrograms()
+    {
+        CoreLink::Node n;
+        DummyProgram p1, p2;
+
+        QVERIFY(n.installProgram(&p1));
+        QVERIFY(n.installProgram(&p2));
+
+        CoreLink::PID p1_pid = n.spawnProcess(p1.getID());
+        CoreLink::PID p2_pid = n.spawnProcess(p2.getID());
+
+        QVERIFY(p1_pid != CoreLink::PID());
+        QVERIFY(p2_pid != CoreLink::PID());
+
+        CoreLink::PIDList pids = n.getRunningPrograms();
+        QVERIFY(pids.contains(p1_pid) && pids.contains(p2_pid));
+
+        n.tick(500);
+
+        QVERIFY(n.killProcess(p1_pid));
+        QVERIFY(!n.getRunningPrograms().contains(p1_pid));
     }
 };
 
