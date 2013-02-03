@@ -20,9 +20,11 @@ public:
 class ProgramWithResources : public DummyProgram
 {
     int m_resource_count;
+    bool m_exit;
 public:
     ProgramWithResources() : 
-        m_resource_count(0)
+        m_resource_count(0),
+        m_exit(false)
     {
     }
 
@@ -42,7 +44,7 @@ public:
         }
     };
 
-    bool HasAllocatedResources() const
+    bool hasAllocatedResources() const
     {
         return m_resource_count > 0;
     }
@@ -50,7 +52,16 @@ public:
     virtual void main(CoreLink::InstructionSet& is)
     {
         ResourceHandle h(m_resource_count);
-        DummyProgram::main(is);
+
+        while (!m_exit)
+        {
+            is.noOp();
+        }
+    }
+
+    void enableExit()
+    {
+        m_exit = true;
     }
 };
 
@@ -90,11 +101,30 @@ private slots:
 
         n.tick(500);
         
-        QVERIFY(p.HasAllocatedResources());
+        QVERIFY(p.hasAllocatedResources());
         
         n.killProcess(pid);
 
-        QVERIFY(!p.HasAllocatedResources());
+        QVERIFY(!p.hasAllocatedResources());
+    }
+
+    void stackUnwindsOnImplicitExit()
+    {
+        ProgramWithResources p;
+        CoreLink::Node n;
+
+
+        n.installProgram(&p);
+        (void)n.spawnProcess(p.getID());
+
+        n.tick(1);
+        p.enableExit();
+
+        QVERIFY(p.hasAllocatedResources());
+
+        n.tick(1);
+
+        QVERIFY(!p.hasAllocatedResources());
     }
 
     void canRunMultiplePrograms()
