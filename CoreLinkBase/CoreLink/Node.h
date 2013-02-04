@@ -24,7 +24,7 @@ class Node
     ProcessMap m_running_programs;
     ProgramMap m_installed_programs;
     int m_next_pid;
-    NodeList m_neighbors;
+    NodeIDList m_neighbors;
     NodeID m_id;
 
 public:
@@ -37,7 +37,7 @@ public:
 
     /// Add the given node to this node's adjacency list.
     /// \param[in] node_p The node to add.
-    void addNeighbor(Node *node_p);
+    void addNeighbor(NodeID node);
 
 
     /// Get the ID of this node.
@@ -66,7 +66,11 @@ public:
 
     /// Get the nodes connected to this node.
     /// \return The nodes.
-    NodeList getNeighbors() const;
+    NodeIDList getNeighbors() const;
+
+    /// Check whether the node has a neighbor with the given ID.
+    /// \return True if the node is a neighbor of this node.
+    bool hasNeighbor(NodeID node) const;
     
 
     /// Spawn a process for the program with the given ID.

@@ -36,9 +36,9 @@ void Node::tick(int quanta)
     }
 }
 
-void Node::addNeighbor(Node *neighbor_p)
+void Node::addNeighbor(NodeID id)
 {
-    m_neighbors << neighbor_p;
+    m_neighbors << id;
 }
 
 NodeID Node::getID() const
@@ -76,9 +76,14 @@ PID Node::getPID(ProgramID id) const
     return PID();
 }
 
-NodeList Node::getNeighbors() const
+NodeIDList Node::getNeighbors() const
 {
     return m_neighbors;
+}
+
+bool Node::hasNeighbor(NodeID node) const
+{
+    return m_neighbors.contains(node);
 }
 
 PID Node::spawnProcess(ProgramID id)

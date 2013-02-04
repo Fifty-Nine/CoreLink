@@ -18,16 +18,15 @@ class Network
 
 public:
     Network();
+    ~Network();
 
-    void tick(int time_quanta);
+    void tick();
 
     NodeID addNode();
     bool connectNodes(NodeID first, NodeID second);
 
     NodeIDList getNodes() const;
-    NodeIDList getNeighbors(NodeID id) const;
     const Node *getNode(NodeID id) const;
-
 };
 
 } // namespace CoreLink
