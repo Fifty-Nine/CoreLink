@@ -20,6 +20,16 @@ void Network::tick()
     {
         node_p->tick();
     }
+
+    for (NodePtr& node_p: m_nodes)
+    {
+        node_p->processMailbox();
+    }
+
+    for (NodePtr& node_p: m_nodes)
+    {
+        node_p->removeFinishedProcesses();
+    }
 }
 
 NodeID Network::addNode()

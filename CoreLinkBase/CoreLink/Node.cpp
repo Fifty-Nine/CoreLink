@@ -23,19 +23,12 @@ void Node::tick()
     quanta /= m_running_programs.count();
     quanta = std::max(1, quanta);
     
-    PIDList finished;
-
     for (ProcessPtr& p: m_running_programs)
     {
         if (!p->run(quanta))
         {
-            finished << p->getPID();
+            m_finished_programs << p->getPID();
         }
-    }
-
-    for (PID p: finished)
-    {
-        m_running_programs.remove(p);
     }
 }
 
@@ -47,6 +40,16 @@ void Node::processMailbox()
     }
 
     m_mailbox.clear();
+}
+
+void Node::removeFinishedProcesses()
+{
+    for (PID p: m_finished_programs)
+    {
+        m_running_programs.remove(p);
+    }
+
+    m_finished_programs.clear();
 }
 
 void Node::addNeighbor(NodeID id)

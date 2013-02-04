@@ -24,6 +24,7 @@ class Node
     typedef QHash<ProgramID, Program*> ProgramMap;
     typedef QList<Message> MessageList;
     ProcessMap m_running_programs;
+    PIDList m_finished_programs;
     ProgramMap m_installed_programs;
     int m_next_pid;
     NodeIDList m_neighbors;
@@ -39,6 +40,9 @@ public:
 
     /// Process pending messages in the mailbox.
     void processMailbox();
+
+    /// Remove any processes that have exited.
+    void removeFinishedProcesses();
 
     /// Add the given node to this node's adjacency list.
     /// \param[in] node_p The node to add.
