@@ -1,17 +1,20 @@
 #include "CoreLink/Node.h"
 
+#include "CoreLink/GameSettings.h"
 #include "CoreLink/Program.h"
 
 namespace CoreLink { 
 
-Node::Node() : 
+Node::Node(const GameSettings& settings) : 
+    m_settings(settings),
     m_next_pid(1), 
     m_id(NodeID::createUuid())
 {
 }
 
-void Node::tick(int quanta)
+void Node::tick()
 {
+    int quanta = m_settings.getTimeSliceSize();
     if ((quanta <= 0) || m_running_programs.empty())
     {
         return;
@@ -95,7 +98,7 @@ PID Node::spawnProcess(ProgramID id)
     }
 
     int pid = m_next_pid++;
-    ProcessPtr p(new Process(*it.value(), *this, pid));
+    ProcessPtr p(new Process(m_settings, *it.value(), *this, pid));
     m_running_programs.insert(pid, std::move(p));
 
     return pid;

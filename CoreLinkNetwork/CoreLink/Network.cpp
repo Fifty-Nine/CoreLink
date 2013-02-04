@@ -4,7 +4,8 @@
 
 namespace CoreLink { 
 
-Network::Network()
+Network::Network(const GameSettings& settings) : 
+    m_settings(settings)
 {
 }
 
@@ -17,13 +18,13 @@ void Network::tick()
     /// \todo Make parallel.
     for (NodePtr& node_p: m_nodes)
     {
-        node_p->tick(500);
+        node_p->tick();
     }
 }
 
 NodeID Network::addNode()
 {
-    NodePtr node_p(new Node);
+    NodePtr node_p(new Node(m_settings));
 
     m_nodes[node_p->getID()] = node_p;
 

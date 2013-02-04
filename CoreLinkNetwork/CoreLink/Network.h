@@ -7,6 +7,7 @@
 
 namespace CoreLink { 
 
+class GameSettings;
 class Node;
 
 /// Represents a network of CoreLink nodes.
@@ -14,10 +15,11 @@ class Network
 {
     typedef std::shared_ptr<Node> NodePtr;
     typedef QHash<NodeID,NodePtr> NodePtrList;
+    const GameSettings& m_settings;
     NodePtrList m_nodes;
 
 public:
-    Network();
+    Network(const GameSettings& settings);
     ~Network();
 
     void tick();

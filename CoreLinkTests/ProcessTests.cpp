@@ -1,9 +1,10 @@
 #include <QtTest/QtTest>
 
+#include "CoreLink/GameSettings.h"
+#include "CoreLink/InstructionSet.h"
 #include "CoreLink/Node.h"
 #include "CoreLink/Process.h"
 #include "CoreLink/Program.h"
-#include "CoreLink/InstructionSet.h"
 
 class DummyProgram : public CoreLink::Program
 {
@@ -78,11 +79,13 @@ public:
 class ProcessTests : public QObject
 {
     Q_OBJECT
+    const CoreLink::GameSettings s_settings;
+
 private slots:
     void sanity()
     {
         DummyProgram p;
-        CoreLink::Node n;
+        CoreLink::Node n(s_settings);
 
         QVERIFY(n.installProgram(&p));
         QVERIFY(n.getInstalledPrograms().contains(p.getID()));
@@ -92,7 +95,7 @@ private slots:
         QVERIFY(pid != CoreLink::PID());
         QVERIFY(n.getRunningPrograms().contains(pid));
 
-        n.tick(500);
+        n.tick();
 
         QVERIFY(n.killProcess(pid));
         QVERIFY(!n.getRunningPrograms().contains(pid));
@@ -104,12 +107,12 @@ private slots:
     void stackUnwindsWhenKilled()
     {
         ProgramWithResources p;
-        CoreLink::Node n;
+        CoreLink::Node n(s_settings);
 
         n.installProgram(&p);
         CoreLink::PID pid = n.spawnProcess(p.getID());
 
-        n.tick(500);
+        n.tick();
         
         QVERIFY(p.hasAllocatedResources());
         
@@ -121,18 +124,18 @@ private slots:
     void stackUnwindsOnImplicitExit()
     {
         ProgramWithResources p;
-        CoreLink::Node n;
+        CoreLink::Node n(s_settings);
 
 
         n.installProgram(&p);
         (void)n.spawnProcess(p.getID());
 
-        n.tick(1);
+        n.tick();
         p.enableExit();
 
         QVERIFY(p.hasAllocatedResources());
 
-        n.tick(1);
+        n.tick();
 
         QVERIFY(!p.hasAllocatedResources());
     }
@@ -140,25 +143,25 @@ private slots:
     void stackUnwindsOnExplicitExit()
     {
         ProgramWithResourcesExplicitExit p;
-        CoreLink::Node n;
+        CoreLink::Node n(s_settings);
 
 
         n.installProgram(&p);
         (void)n.spawnProcess(p.getID());
 
-        n.tick(1);
+        n.tick();
         p.enableExit();
 
         QVERIFY(p.hasAllocatedResources());
 
-        n.tick(1);
+        n.tick();
 
         QVERIFY(!p.hasAllocatedResources());
     }
 
     void canRunMultiplePrograms()
     {
-        CoreLink::Node n;
+        CoreLink::Node n(s_settings);
         DummyProgram p1, p2;
 
         QVERIFY(n.installProgram(&p1));
@@ -173,7 +176,7 @@ private slots:
         CoreLink::PIDList pids = n.getRunningPrograms();
         QVERIFY(pids.contains(p1_pid) && pids.contains(p2_pid));
 
-        n.tick(500);
+        n.tick();
 
         QVERIFY(n.killProcess(p1_pid));
         QVERIFY(!n.getRunningPrograms().contains(p1_pid));

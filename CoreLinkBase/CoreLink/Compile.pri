@@ -2,6 +2,7 @@ isEmpty(CORELINKBASE_CORELINK_COMPILE_INCLUDED) {
     CORELINKBASE_CORELINK_COMPILE_INCLUDED = yes
 
     CORELINK_HEADERS += \
+        GameSettings.h \
         InstructionSet.h \
         Node.h \
         Process.h \

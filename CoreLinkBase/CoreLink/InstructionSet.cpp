@@ -11,41 +11,41 @@ InstructionSet::InstructionSet(YieldFcn yield, ExitFcn exit, Node& node) :
 
 void InstructionSet::noOp() const
 {
-    m_yield(1);
+    m_yield(InstructionCost::Cheap);
 }
 
-void InstructionSet::wait(int time) const
+void InstructionSet::yield() const
 {
-    m_yield(time);
+    m_yield(InstructionCost::Slice);
 }
 
 PIDList InstructionSet::getRunningPrograms() const
 {
-    m_yield(1);
+    m_yield(InstructionCost::Cheap);
     return m_node.getRunningPrograms();
 }
 
 ProgramIDList InstructionSet::getInstalledPrograms() const
 {
-    m_yield(1);
+    m_yield(InstructionCost::Cheap);
     return m_node.getInstalledPrograms();
 }
 
 ProgramID InstructionSet::getProgramID(PID pid) const
 {
-    m_yield(1);
+    m_yield(InstructionCost::Cheap);
     return m_node.getProgramID(pid);
 }
 
 bool InstructionSet::killProcess(PID pid)
 {
-    m_yield(5);
+    m_yield(InstructionCost::Expensive);
     return m_node.killProcess(pid);
 }
 
 bool InstructionSet::deleteProgram(ProgramID id)
 {
-    m_yield(5);
+    m_yield(InstructionCost::Extreme);
     return m_node.deleteProgram(id);
 }
 

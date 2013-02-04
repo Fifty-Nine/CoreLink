@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <ucontext.h>
+#include "CoreLink/GameSettings.h"
 #include "CoreLink/InstructionSet.h"
 #include "CoreLink/Program.h"
 
@@ -24,6 +25,7 @@ static void runProgram(Program *program_p, InstructionSet *is_p)
 
 struct Process::Data
 {
+    const GameSettings& m_settings;
     ProgramID m_program_id;
     PID m_pid;
     int m_remaining_time;
@@ -32,7 +34,8 @@ struct Process::Data
     ucontext_t program_context;
     char stack[8192];
 
-    Data(Program& p, Node& n, PID pid) : 
+    Data(const GameSettings& settings, Program& p, Node& n, PID pid) : 
+        m_settings(settings),
         m_program_id(p.getID()), 
         m_pid(pid),
         m_remaining_time(0),
@@ -56,8 +59,11 @@ struct Process::Data
         }
     }
 
-    void yield(int time)
+    void yield(InstructionCost::Enum cost)
     {
+        int time = (cost == InstructionCost::Slice) ? 
+            m_remaining_time : m_settings.getCost(cost);
+
         while ((time > m_remaining_time) && (m_remaining_time >= 0))
         {
             swapcontext(&program_context, &runner_context);
@@ -78,8 +84,8 @@ struct Process::Data
     }
 };
     
-Process::Process(Program& p, Node& n, PID pid) : 
-    d(new Data(p, n, pid))
+Process::Process(const GameSettings& s, Program& p, Node& n, PID pid) : 
+    d(new Data(s, p, n, pid))
 {
 }
 

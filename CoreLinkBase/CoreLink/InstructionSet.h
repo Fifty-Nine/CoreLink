@@ -13,7 +13,7 @@ class Node;
 class InstructionSet
 {
 public:
-    typedef std::function<void(int)> YieldFcn;
+    typedef std::function<void(InstructionCost::Enum)> YieldFcn;
     typedef std::function<void(void)> ExitFcn;
 
 private:
@@ -32,9 +32,8 @@ public:
     /// Do nothing for one instruction cycle.
     void noOp() const;
 
-    /// Do nothing for multiple instruction cycles.
-    /// \param[in] time The number of cycles to wait for.
-    void wait(int time) const;
+    /// Yield the remaining time slice.
+    void yield() const;
 
     /// Get the list of running programs on the current node.
     /// \return The PIDs of the running programs.

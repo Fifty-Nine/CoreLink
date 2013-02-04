@@ -7,6 +7,7 @@
 namespace CoreLink
 {
 
+class GameSettings;
 class Node;
 class Program;
 
@@ -18,10 +19,11 @@ class Process
 
 public:
     /// Create a new process.
+    /// \param[in] settings The game settings.
     /// \param[in] program The program executed by the process.
     /// \param[in] node The node the process runs on.
     /// \param[in] pid The ID of the process on the given node.
-    Process(Program& program, Node& node, PID pid);
+    Process(const GameSettings& settings, Program& program, Node& node, PID pid);
 
     /// Destructor.
     ~Process();

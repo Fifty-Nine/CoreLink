@@ -18,6 +18,7 @@ typedef QList<Node*> NodeList;
 /// Represents a computer on which programs can run.
 class Node
 {
+    const GameSettings& m_settings;
     typedef std::shared_ptr<Process> ProcessPtr;
     typedef QHash<PID,ProcessPtr> ProcessMap;
     typedef QHash<ProgramID, Program*> ProgramMap;
@@ -29,11 +30,11 @@ class Node
 
 public:
     /// Construct a new node.
-    Node();
+    Node(const GameSettings& settings);
     
     /// Run the active programs on the node for the given number of cycles.
     /// \param[in] time_quanta The number of cycles to run.
-    void tick(int time_quanta);
+    void tick();
 
     /// Add the given node to this node's adjacency list.
     /// \param[in] node_p The node to add.

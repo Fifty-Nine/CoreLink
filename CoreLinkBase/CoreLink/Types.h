@@ -26,5 +26,18 @@ typedef QUuid NodeID;
 /// A list of node IDs.
 typedef QList<QUuid> NodeIDList;
 
+namespace InstructionCost
+{
+enum Enum 
+{
+    Slice, 
+    Free, 
+    Cheap, 
+    Moderate,
+    Expensive,
+    Extreme
+};
+}
+
 
 } // namespace CoreLink
