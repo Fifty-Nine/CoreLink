@@ -4,6 +4,46 @@
 
 namespace CoreLink { 
 
+using namespace std::placeholders;
+
+template<class Fcn>
+Message CreateMessage(Fcn f, typename Fcn::result_type& result)
+{
+    return [&](Node& n) { result = f(n); };
+}
+
+template<class Fcn>
+void InstructionSet::WrapCall(NodeID dest, InstructionCost::Enum cost, Fcn f) const
+{
+    m_yield(cost);
+    if (dest == NodeID())
+    {
+        f(m_node);
+        return;
+    }
+
+    (void)m_node.postMessage(dest, f); 
+
+    yield();
+}
+
+template<class Fcn>
+void InstructionSet::WrapCall(
+    NodeID dest, InstructionCost::Enum cost, Fcn f, typename Fcn::result_type& r)
+    const
+{
+    m_yield(cost);
+    if (dest == NodeID())
+    {
+        r = f(m_node);
+        return;
+    }
+
+    (void)m_node.postMessage(dest, CreateMessage(f, r));
+
+    yield();
+}
+
 InstructionSet::InstructionSet(YieldFcn yield, ExitFcn exit, Node& node) :
     m_yield(yield), m_exit(exit), m_node(node)
 {
@@ -19,34 +59,42 @@ void InstructionSet::yield() const
     m_yield(InstructionCost::Slice);
 }
 
-PIDList InstructionSet::getRunningPrograms() const
+PIDList InstructionSet::getRunningPrograms(NodeID id) const
 {
-    m_yield(InstructionCost::Cheap);
-    return m_node.getRunningPrograms();
+    PIDList r;
+    WrapCall(id, InstructionCost::Cheap, std::mem_fn(&Node::getRunningPrograms), r);
+    return r;
 }
 
-ProgramIDList InstructionSet::getInstalledPrograms() const
+ProgramIDList InstructionSet::getInstalledPrograms(NodeID id) const
 {
-    m_yield(InstructionCost::Cheap);
-    return m_node.getInstalledPrograms();
+    ProgramIDList r;
+    WrapCall(id, InstructionCost::Cheap, std::mem_fn(&Node::getInstalledPrograms), r);
+    return r;
 }
 
-ProgramID InstructionSet::getProgramID(PID pid) const
+ProgramID InstructionSet::getProgramID(PID pid, NodeID dest) const
 {
-    m_yield(InstructionCost::Cheap);
-    return m_node.getProgramID(pid);
+    ProgramID r;
+    WrapCall(dest, InstructionCost::Cheap, 
+        std::bind(&Node::getProgramID, _1, pid), r);
+    return r;
 }
 
-bool InstructionSet::killProcess(PID pid)
+bool InstructionSet::killProcess(PID pid, NodeID dest)
 {
-    m_yield(InstructionCost::Expensive);
-    return m_node.killProcess(pid);
+    bool r;
+    WrapCall(dest, InstructionCost::Expensive,
+        std::bind(&Node::killProcess, _1, pid), r);
+    return r;
 }
 
-bool InstructionSet::deleteProgram(ProgramID id)
+bool InstructionSet::deleteProgram(ProgramID id, NodeID dest)
 {
-    m_yield(InstructionCost::Extreme);
-    return m_node.deleteProgram(id);
+    bool r;
+    WrapCall(dest, InstructionCost::Extreme, 
+        std::bind(&Node::deleteProgram, _1, id), r);
+    return r;
 }
 
 NodeIDList InstructionSet::getNeighbors() const
