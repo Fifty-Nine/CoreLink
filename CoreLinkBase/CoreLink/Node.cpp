@@ -39,6 +39,16 @@ void Node::tick()
     }
 }
 
+void Node::processMailbox()
+{
+    for (const Message& msg: m_mailbox)
+    {
+        msg(*this);
+    }
+
+    m_mailbox.clear();
+}
+
 void Node::addNeighbor(NodeID id)
 {
     m_neighbors << id;
@@ -141,6 +151,11 @@ bool Node::killProcess(PID id)
 
     m_running_programs.erase(it);
     return true;
+}
+
+void Node::postMessage(Message msg)
+{
+    m_mailbox << msg;
 }
 
 } // namespace CoreLink

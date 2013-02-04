@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <QList>
 #include <QUuid>
 
@@ -39,5 +40,8 @@ enum Enum
 };
 }
 
+class Node;
+/// The type of a message passed to a node.
+typedef std::function<void(Node&)> Message;
 
 } // namespace CoreLink

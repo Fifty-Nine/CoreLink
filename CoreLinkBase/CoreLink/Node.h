@@ -22,19 +22,23 @@ class Node
     typedef std::shared_ptr<Process> ProcessPtr;
     typedef QHash<PID,ProcessPtr> ProcessMap;
     typedef QHash<ProgramID, Program*> ProgramMap;
+    typedef QList<Message> MessageList;
     ProcessMap m_running_programs;
     ProgramMap m_installed_programs;
     int m_next_pid;
     NodeIDList m_neighbors;
     NodeID m_id;
+    MessageList m_mailbox; 
 
 public:
     /// Construct a new node.
     Node(const GameSettings& settings);
     
     /// Run the active programs on the node for the given number of cycles.
-    /// \param[in] time_quanta The number of cycles to run.
     void tick();
+
+    /// Process pending messages in the mailbox.
+    void processMailbox();
 
     /// Add the given node to this node's adjacency list.
     /// \param[in] node_p The node to add.
@@ -95,6 +99,10 @@ public:
     /// \param[in] id The PID.
     /// \return True if the process was successfully killed.
     bool killProcess(PID id);
+
+    /// Post a message to this node.
+    /// \param[in] msg The message to post.
+    void postMessage(Message msg);
 };
 
 } // namespace CoreLink
