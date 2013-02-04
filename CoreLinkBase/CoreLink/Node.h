@@ -1,7 +1,9 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <QHash>
+#include <QSet>
 
 #include "CoreLink/Process.h"
 #include "CoreLink/Types.h"
@@ -18,22 +20,30 @@ typedef QList<Node*> NodeList;
 /// Represents a computer on which programs can run.
 class Node
 {
+public:
+    /// A function used to post messages to other nodes.
+    typedef std::function<void(NodeID, Message)> PostFcn;
+
+private:
     const GameSettings& m_settings;
     typedef std::shared_ptr<Process> ProcessPtr;
     typedef QHash<PID,ProcessPtr> ProcessMap;
     typedef QHash<ProgramID, Program*> ProgramMap;
     typedef QList<Message> MessageList;
+    typedef QSet<NodeID> NodeIDSet;
     ProcessMap m_running_programs;
     PIDList m_finished_programs;
     ProgramMap m_installed_programs;
     int m_next_pid;
-    NodeIDList m_neighbors;
+    NodeIDSet m_neighbors;
     NodeID m_id;
     MessageList m_mailbox; 
+    PostFcn m_post;
 
 public:
+
     /// Construct a new node.
-    Node(const GameSettings& settings);
+    Node(const GameSettings& settings, PostFcn post = PostFcn());
     
     /// Run the active programs on the node for the given number of cycles.
     void tick();
@@ -107,6 +117,11 @@ public:
     /// Post a message to this node.
     /// \param[in] msg The message to post.
     void postMessage(Message msg);
+
+    /// Post a message to a neighboring node.
+    /// \param[in] node The ID of the node to post to.
+    /// \param[in] msg The message to post.
+    bool postMessage(NodeID node, Message msg);
 };
 
 } // namespace CoreLink

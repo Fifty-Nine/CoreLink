@@ -26,6 +26,7 @@ public:
 
     NodeID addNode();
     bool connectNodes(NodeID first, NodeID second);
+    void postMessage(NodeID node, Message msg);
 
     NodeIDList getNodes() const;
     const Node *getNode(NodeID id) const;

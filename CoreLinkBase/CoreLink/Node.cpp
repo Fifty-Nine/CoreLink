@@ -5,10 +5,11 @@
 
 namespace CoreLink { 
 
-Node::Node(const GameSettings& settings) : 
+Node::Node(const GameSettings& settings, PostFcn post) : 
     m_settings(settings),
     m_next_pid(1), 
-    m_id(NodeID::createUuid())
+    m_id(NodeID::createUuid()),
+    m_post(post)
 {
 }
 
@@ -94,7 +95,7 @@ PID Node::getPID(ProgramID id) const
 
 NodeIDList Node::getNeighbors() const
 {
-    return m_neighbors;
+    return m_neighbors.toList();
 }
 
 bool Node::hasNeighbor(NodeID node) const
@@ -159,6 +160,16 @@ bool Node::killProcess(PID id)
 void Node::postMessage(Message msg)
 {
     m_mailbox << msg;
+}
+
+bool Node::postMessage(NodeID node, Message msg)
+{
+    if (m_neighbors.contains(node) && m_post)
+    {
+        m_post(node, msg);
+        return true;
+    }
+    return false;
 }
 
 } // namespace CoreLink

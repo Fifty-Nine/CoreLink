@@ -34,7 +34,12 @@ void Network::tick()
 
 NodeID Network::addNode()
 {
-    NodePtr node_p(new Node(m_settings));
+    using namespace std::placeholders;
+    NodePtr node_p(
+        new Node(
+            m_settings, 
+            std::bind(&Network::postMessage, this, _1, _2)
+    ));
 
     m_nodes[node_p->getID()] = node_p;
 
