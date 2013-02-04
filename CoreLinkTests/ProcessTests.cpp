@@ -79,7 +79,7 @@ public:
 class ProcessTests : public QObject
 {
     Q_OBJECT
-    const CoreLink::GameSettings s_settings;
+    const CoreLink::GameSettings s_settings = CoreLink::GameSettings();
 
 private slots:
     void sanity()
