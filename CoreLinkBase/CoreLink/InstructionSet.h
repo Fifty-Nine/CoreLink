@@ -58,6 +58,10 @@ public:
     /// \return True if a program with the given ID was successfully deleted.
     bool deleteProgram(ProgramID id);
 
+    /// Get the IDs of the nodes that are connected to the current node.
+    /// \return The IDs.
+    NodeIDList getNeighbors() const;
+
     /// Exit the currently running process.
     void exit();
 };

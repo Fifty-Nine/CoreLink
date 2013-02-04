@@ -49,6 +49,12 @@ bool InstructionSet::deleteProgram(ProgramID id)
     return m_node.deleteProgram(id);
 }
 
+NodeIDList InstructionSet::getNeighbors() const
+{
+    m_yield(InstructionCost::Cheap);
+    return m_node.getNeighbors();
+}
+
 void InstructionSet::exit()
 {
     m_exit();
