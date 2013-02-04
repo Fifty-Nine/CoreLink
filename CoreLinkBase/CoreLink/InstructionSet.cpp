@@ -81,6 +81,14 @@ ProgramID InstructionSet::getProgramID(PID pid, NodeID dest) const
     return r;
 }
 
+PID InstructionSet::spawnProcess(ProgramID program, NodeID dest)
+{
+    PID r;
+    WrapCall(dest, InstructionCost::Moderate, 
+        std::bind(&Node::spawnProcess, _1, program), r );
+    return r;
+}
+
 bool InstructionSet::killProcess(PID pid, NodeID dest)
 {
     bool r;

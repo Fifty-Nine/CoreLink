@@ -52,7 +52,13 @@ public:
     /// \return The program ID, or a null ID if not found.
     ProgramID getProgramID(PID process_id, NodeID dest = NodeID()) const;
 
-    /// Kill the process on the current node with the given ID.
+    /// Spawn the given process on the given node.
+    /// \param[in] program The program to start.
+    /// \param[in] dest The node to spawn the process on.
+    /// \return The PID of the spawned process, or PID() on failure.
+    PID spawnProcess(ProgramID program, NodeID dest = NodeID());
+
+    /// Kill the given process on the given node.
     /// \param[in] pid The ID of the process to kill.
     /// \param[in] dest The ID of the node to execute on.
     /// \return True if a process with the given ID was successfully killed.
